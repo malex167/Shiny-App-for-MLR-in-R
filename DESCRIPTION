@@ -1,0 +1,16 @@
+Package: MATH4753GALEXFORCELAB13
+Type: Package
+Title: LAB 13
+Version: 0.1.0
+Author: Alex Force
+Maintainer: Alex Force <michael.a.force-1@ou.edu>
+Description: The lab 13 package produces 3 graphs comprising of LOESS curve, a linear fit, and a quadratic fit for the spruce data set. This is all in regard to modeling different forms of regression modeling.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Imports: dplyr, ggplot2, shiny
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
+RoxygenNote: 7.3.1

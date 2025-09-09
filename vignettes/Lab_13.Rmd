@@ -1,0 +1,139 @@
+---
+title: "Lab_13"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Lab_13}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(MATH4753GALEXFORCELAB13)
+```
+
+```{r}
+library(dplyr)
+library(ggplot2)
+```
+
+# Task 1
+
+```{r}
+spruce <- read.csv("C:/Users/tcaal/Desktop/R/4753/Module 13/SPRUCE.csv")
+
+head(spruce, 6)
+```
+
+# Task 2
+
+```{r, fig.width=5, fig.height=4}
+plt <- spruce |>
+  ggplot(aes(x = BHDiameter, y = Height)) +
+  geom_point(col = 'blue') +
+  ggtitle("Alex Force")
+
+plt
+```
+
+# Task 3
+
+```{r, fig.width=5, fig.height=4}
+plt2 <- plt + geom_smooth(method = 'loess', formula = 'y ~ x')
+plt2
+```
+
+From the plot, the data suggests a curve rather than a straight line. 
+
+# Task 4
+
+```{r}
+ylm <- lm(formula = Height ~ BHDiameter, data = spruce)
+summary(ylm)
+```
+
+$$\begin{align} 
+\hat{\beta_0}=9.14684 \\
+\hat{\beta_1}=0.48147 \\
+\hspace{2cm} \\
+\hat{Height} & = \hat{\beta_0} + \hat{\beta_1}BH Diameter \\
+             & = 9.14684 + 0.48147 BH Diameter
+\end{align}$$
+
+# Task 5
+
+```{r, fig.width=5, fig.height=4}
+plt + stat_smooth(method = 'lm', formula = 'y ~ x')
+```
+
+# Task 6
+
+```{r, fig.width=5, fig.height=4}
+spruce2 <- spruce |>
+  mutate(r_i = residuals(ylm), yhat = 9.14684 + 0.48147 * BHDiameter)
+
+plt3 <- spruce2 |>
+  ggplot(aes(x = yhat, y = r_i)) +
+  geom_point(col = 'blue') +
+  geom_smooth(method = 'loess', formula = 'y ~ x') +
+  ggtitle("Alex Force's y hat to residuals Plot")
+
+plt3
+```
+
+## (a)
+
+The first assumption made in the linear model states that the mean of the probability distribution for the random error (epsilon) is 0, this then implies that the mean value of y is:
+
+$$E(y) = \beta_0 + \beta_1x$$
+This in turn forms a linear combination of betas. The second assumption states that the variance for epsilon is constant for all independent x values, this is equivalent to a constant for all x values too. These 2 assumptions contribute to epsilon then takes a normal distribution. These assumptions are contrasted with the diagnostic shown above where a non normal distribution is taken by epsilon. 
+
+## (b)
+
+The plot takes on a quadratic rather than a linear fit.
+
+# Task 7
+
+## (a)
+
+The "I" function change the class of an object indicating it is treated "as is", when applied in terms of model formulae the I() function ensures that the operator is being used in the arithmetic way. the lm() function is structured as "response ~ terms" where the term component is structured as a series of terms which are used as a predictor to response. For the lm() function to operate properly, I() is used to interpret  each component properly (intercept, BH Diameter, and BH Diameter^2). 
+
+
+## (b)
+
+```{r}
+ylm2 <- lm(formula = Height ~ BHDiameter + I(BHDiameter^2), data = spruce)
+
+summary(ylm2)
+```
+
+# Task 8
+
+## (a)
+
+R^2 value for model #1: 0.6468
+R^2 value for model #2: 0.7604
+
+The second model, using the quadratic approach, has the R^2 value closest to 1 indicating that this model is the "best" of the 2. 
+
+## (b)
+
+$$\begin{align} 
+\hat{\beta_0}=0.860896 \\
+\hat{\beta_1}=1.469592 \\
+\hat{\beta_2}=-0.027457 \\
+\hspace{2cm} \\
+\hat{Height} & = \hat{\beta_0} + \hat{\beta_1}BH Diameter + \hat{\beta_2}BH Diameter^2\\
+             & = 0.860896 + 1.469592 BH Diameter - 0.027457 BH Diameter^2
+\end{align}$$
+
+# Task 9
+
+![](C:/Users/tcaal/Desktop/R/4753/Module 13/shiny1.png){width=100%}
+![](C:/Users/tcaal/Desktop/R/4753/Module 13/shiny2.png){width=100%}
